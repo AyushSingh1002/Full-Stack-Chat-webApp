@@ -1,9 +1,9 @@
 import React from 'react'
 import { useChatStore } from '../store/chatStore.js'
 import { Sidebar } from 'lucide-react'
-import ChatContainer from '../Components/ChatContainer.jsx'
-import GloabalChatBox from '../Components/GloabalChatBox.jsx'
-import {UserSidebar} from '../Components/SideBar.jsx'
+import ChatContainer from '../components/ChatContainer.jsx'
+import GloabalChatBox from '../components/GloabalChatBox.jsx'
+import {UserSidebar} from '../components/SideBar.jsx'
 
 const HomePage = () => {
   const { selectedUser} = useChatStore()

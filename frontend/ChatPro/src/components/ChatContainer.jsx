@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
 import { useChatStore } from '../store/chatStore.js'
 import { useEffect } from 'react'
-import Skeleton from './Skeletons/skeletonChat.jsx'
-import ChatHeader from './ChatHeader.jsx'
-import ChatInput from './ChatInput.jsx'
+import Skeleton from './Skeletons/skeletonChat.js'
+import ChatHeader from './ChatHeader.js'
+import ChatInput from './ChatInput.js'
 import { useAuthStore } from '../store/useAuthStore.js'
 import {formatMessageTime} from "../lib/utils.js"
 const image = "https://th.bing.com/th/id/OIP.PaHgcBDxUWH6FmlUnmwhQwHaMx?pid=ImgDet&w=183&h=315&c=7&dpr=1.1"
