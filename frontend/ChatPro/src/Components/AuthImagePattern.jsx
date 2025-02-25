@@ -19,4 +19,4 @@ const AuthImagePattern = ({ title, subtitle }) => {
     );
   };
   
-export {AuthImagePattern};
+  export default AuthImagePattern;
