@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react'
-import Navbar from './Components/Navbar.jsx'
+import Navbar from './components/Navbar.jsx'
 import { Routes , Route, Navigate } from 'react-router-dom'
 import SignUpPG from './Pages/SignUp.jsx'
 import Login from './Pages/Login.jsx'
