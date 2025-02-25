@@ -15,7 +15,7 @@ const SignUpPG = () => {
     password: '',
     fullName: '',
   })
-  const { isSignIn, SignUp } = useAuthStore()
+  const { isSignedIn, SignUp } = useAuthStore()
 
   const validateUser = () => {
     if (!formData.fullName.trim()) return toast.error("Full name is required");
@@ -120,8 +120,8 @@ const SignUpPG = () => {
               </div>
             </div>
 
-            <button type="submit" className="btn btn-primary w-full" disabled={isSignIn}>
-              {isSignIn ? (
+            <button type="submit" className="btn btn-primary w-full" disabled={isSignedIn}>
+              {isSignedIn ? (
                 <>
                   <Loader2 className="size-5 animate-spin" />
                   Loading...
