@@ -6,7 +6,6 @@ import ChatHeader from './ChatHeader.jsx'
 import ChatInput from './ChatInput.jsx'
 import { useAuthStore } from '../store/useAuthStore.js'
 import {formatMessageTime} from "../lib/utils.js"
-import holdbutton from '../lib/CustomFunction.jsx'
 const image = "https://th.bing.com/th/id/OIP.PaHgcBDxUWH6FmlUnmwhQwHaMx?pid=ImgDet&w=183&h=315&c=7&dpr=1.1"
 
 const ChatContainer = () => {
@@ -14,12 +13,14 @@ const ChatContainer = () => {
   const { AuthUser } = useAuthStore()
   const messageEndRef = useRef(null)
 
-  const [menu, setMenu] = useState(false)
+  const [menu, setMenu] = useState({})
 
-  const DisplayMenu = (() => {
-      setMenu((preMenu) => !preMenu
-      )
-    })
+  const DisplayMenu = ((messageId) => {
+     
+      setMenu((m) => ({...m, [messageId] : !m[messageId]}))
+      }
+    )
+    console.log(menu)
 
   useEffect(() => {
     getMessage(selectedUser?._id)
@@ -63,10 +64,10 @@ const ChatContainer = () => {
             src={message.senderId === AuthUser._id ? AuthUser.profilePic || image : selectedUser.profilePic || image } alt="" />
           </div>
         </div>
-        <div className={ menu ? "hidden" : "" }>
+        <div className={menu[message._id] ? "" : "hidden"}>
         <ul className="menu bg-base-200 rounded-box w-56 relative">
   <li className="menu-title">Menu</li>
-  <li><a>Delete</a></li>
+  <li><a onClick={()=>removeMessage(message._id)}>Delete</a></li>
   <li><a>Info</a></li>
 </ul>
         </div>
@@ -76,7 +77,7 @@ const ChatContainer = () => {
         </time>
       </div>
       <div className="chat-bubble flex flex-col cursor-pointer"
-      onClick={DisplayMenu}
+      onClick={()=>DisplayMenu(message._id)}
       >
               {message.image && (
                 <img
