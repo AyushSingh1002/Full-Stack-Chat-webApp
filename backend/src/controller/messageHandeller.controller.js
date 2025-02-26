@@ -66,5 +66,19 @@ const sendMessage = async (req,res) => {
         console.log("check something went wrong in sendMessage in message controller" ,error)
     }
 }
+const RemoveMsg = async (req,res) => {
+    const message = req.params.id
+try {
+    const selectedMessage = await Message.deleteOne({_id : message})
+    if(selectedMessage.deletedCount === 0){
+        throw new Error("404 Message not found")
+    }
+   
+    
+    res.status(201).json({"message": "message deleted successfully", "messageId": selectedMessage})
+} catch (error) {
+    console.log("something wentwrong in remove message",error, message)
+}
+}
 
-export { getUserForSideBar , getMessages , sendMessage }
+export { getUserForSideBar , getMessages , sendMessage, RemoveMsg }
