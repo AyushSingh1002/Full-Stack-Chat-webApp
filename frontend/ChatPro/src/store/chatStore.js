@@ -59,6 +59,13 @@ export const useChatStore = create((set, get) => ({
         const socket = useAuthStore.getState().socket
         socket.off("newMessage")
     },
+    removeMessage : async (messageid) => {
+       const { message } = get()
+       const res = await axiosInstance.delete(`/message/msg/${messageid}`)
+       const updatedMessages = message.filter((msg) => msg._id !== messageid);
+      set({ message: updatedMessages });
+           
+    },
 
         setSelectedUser : async (user) => set({ selectedUser : user})
 }))
