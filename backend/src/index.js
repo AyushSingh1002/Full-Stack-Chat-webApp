@@ -5,7 +5,7 @@ import cors from "cors";
 import userRouter from "./routes/UserReqHandler.js";
 import ConnectDB from "./lib/Database.js";
 import messageRouter from "./routes/message.route.js";
-import {app, server, io} from "./lib/socket.js"
+import {app, server} from "./lib/socket.js"
 import path from "path"
 
 dotenv.config();
@@ -13,9 +13,9 @@ const __dirname = path.resolve()
 
 // Middleware
 app.use(cors({ origin: "http://localhost:5173", credentials: true }));
-app.use(express.json());
 app.use(cookieParser());
-
+app.use(express.json({ limit: '50mb' })); 
+app.use(express.urlencoded({ limit: '50mb', extended: true })); 
 
 // Routes
 const PORT = process.env.PORT;

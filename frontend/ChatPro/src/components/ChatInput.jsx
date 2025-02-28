@@ -42,7 +42,7 @@ const ChatInput = () => {
 
 
   const handleRemoveImage = () => {
-    setImagePreview(''); // Clear the image preview
+    setImagePreview('');
   };
 
   return (
