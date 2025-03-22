@@ -36,7 +36,7 @@ try {
 
 const sendMessage = async (req,res) => {
     try {
-        const { text , image } = req.body
+        const { text , image , stickers } = req.body
         const {id : othersReciverId} = req.params;
         const myId = req.user._id
 
@@ -51,7 +51,9 @@ const sendMessage = async (req,res) => {
             reciverId : othersReciverId,
             text,
             image : imageUrl,
+            stickers,
         })
+        console.log("new message", newMessage)
 
         await newMessage.save()
 

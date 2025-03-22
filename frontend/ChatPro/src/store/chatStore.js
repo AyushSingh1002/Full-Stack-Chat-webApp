@@ -6,6 +6,8 @@ export const useChatStore = create((set, get) => ({
  message : [],
     users : [],
     stickers : [],
+     limit : 9,
+     page : 1,
     selectedUser : null,
     isUserLoading : false,
     isMessageLoading : false,
@@ -68,12 +70,17 @@ export const useChatStore = create((set, get) => ({
     },
     getStickers : async () => {
         try {
+            const { limit, page } = get()
             const res = await axiosInstance.get("/auth/stickers")
-            set({ stickers : res.data})
+            set({ stickers : res.data.slice((page - 1) * limit , page * limit)})
         } catch (error) {
             toast.error("Failed to fetch stickers")
             
         }
+    },
+    setPage: (page) => {
+        set({page : page });
+        get().getStickers();
     },
 
         setSelectedUser : async (user) => set({ selectedUser : user})

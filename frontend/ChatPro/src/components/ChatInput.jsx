@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { useChatStore } from '../store/chatStore.js';
 import { Image, Send, X } from 'lucide-react';
 
@@ -6,7 +6,8 @@ const ChatInput = () => {
   const [text, setText] = useState(''); // Correct useState syntax
   const [imagePreview, setImagePreview] = useState(''); // Correct state management
   const inputFileRef = useRef(null); // Correct casing for consistency
-  const { sendMessage } = useChatStore(); // Assuming these methods are defined
+  const { sendMessage, stickers, getStickers, page, setPage} = useChatStore(); // Assuming these methods are defined
+  const [ Selectedsticker , setSticker ] = useState("")
 
   const handleImageChange = (e) => {
     const file = e.target.files[0];
@@ -18,14 +19,32 @@ const ChatInput = () => {
       reader.readAsDataURL(file);
     }
   };
-
+    const handleSendSticker = async (sticker) => {
+      try {
+        // Send the sticker directly
+        await sendMessage({
+          text: "", // No text message
+          image: "", // No image
+          stickers: sticker, // Sticker URL
+        });
+        setSticker("") // Reset the selected sticker after sending
+        
+    
+        // Close the modal after sending
+        document.getElementById("my_modal_6").checked = false; // Close the modal
+      } catch (error) {
+        console.error("Failed to send sticker:", error);
+      }
+    };
+    
+  
   const handleSendMessage = async (e) => {
     e.preventDefault(); // Prevent default form submission
     try {
      await sendMessage ({
       text : text.trim(),
       image : imagePreview,})
-
+      
       setText("")
       setImagePreview("")
 
@@ -38,6 +57,19 @@ const ChatInput = () => {
       
     }
     };
+    const handlePrev = (e) => {
+      setPage(Math.max(page - 1, 1))
+      e.preventDefault()
+     }
+     const handleNext = (e) => {
+      setPage((page + 1))
+      e.preventDefault()
+     }
+
+     useEffect(() => {
+      getStickers();
+    }, [page]);
+    
   
 
 
@@ -51,7 +83,7 @@ const ChatInput = () => {
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">
             <img
-              src={imagePreview}
+              src={imagePreview }
               alt="Preview"
               className="w-20 h-20 object-cover rounded-lg border border-zinc-700"
             />
@@ -68,7 +100,7 @@ const ChatInput = () => {
       )}
 
       <form onSubmit={handleSendMessage} className="flex items-center gap-2">
-        <div className="flex-1 flex gap-2">
+        <div className="flex-1 flex gap-2 items-center">
           <input
             type="text"
             className="w-full input input-bordered rounded-lg input-sm sm:input-md"
@@ -83,6 +115,33 @@ const ChatInput = () => {
             ref={inputFileRef}
             onChange={handleImageChange}
           />
+          {/* The button to open modal */}
+<label htmlFor="my_modal_6" className="btn"><img className='h-[20px] w-[20px] cursor-pointer rounded-lg' src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAACXBIWXMAAAsTAAALEwEAmpwYAAAC/0lEQVR4nO1ZS2sUQRDuaC7qDxCd2aRrFT169OAhePAYBEFBEr2IqHgQ9Qes2714EUH8GYIgiXl4CqImOyhIFKPiyUcuKgm6XaO4k5TUzE4SJa+enZn4mA8a9jDd/X3dVTU13wpRoECBAn8FdlRoa1njOVB4D7SZlto0QSOlMWS4lpkGjaPdVTzLe6VKvqzwSGsDymUo80HW8HAq5EE1LoMy862FJ0A3+nZX0O2pUGcqGwgheC1eE1SjH7SpR0LMHCi82P7JM3llAqnwgiDqEFmDqAO0f4n3ZBGJb2L7NdoWh01IPmcAi2iFU6KcCBO2FTa5nPzvIOqQynhRkuMZYYuo2nAsNvrEBkFqcyI6RByxnsxXx5M5ucQGYZf2S60y+956clzn06w2tuipUGf8nrCeHNfkTJjlwQP+dQGy6vdIZV5Lbd5CDXuTvGOkMu9A4cty1T+QlIdIOhE0Ti32MvjJqtRWaBNonF2Yr3AydwF8+ou9C84wqXUvfos2S4Vflwh4nrsAqDYOhU2Xwo9Q84/arl/W/nFQ+JnDqLvaOJiUx/+bxHkBCgEbDChuIEM4E7Tf9eiG49Ezx6MZ1yNadkzQn5XEpYe006nTwIqE8xQA2pwCZXyp/GPrWdep0z5nfJXT9nIWIJU5Gb1NzQ+pzenVWgpnjFxnnGatyHtEpaHmVGYCWs9eWWwLjMfeDlz9vse9Tlt4SPVlL2g8744E9uQHm1PcemQqIHy+hr1hZ7qSeXXzmxVxl8dg84Ugix6rHQGxk8E9jtTmNmh8xbkB2iD/7rrTfGMdNpSQfBaflK5Hk+snHzxt2wlJ+6N+1TrvLSE/nAL5UIDG0ajXb/SnIcCt0/yaAu4Gj1PzoMJKEnmU9TQWXUtA13DwJFUDje28OIzY5stSQGkoyMb9Y2M1colNwC51O5u4dZpbgfwjkSXY4o7tdX5Jsd3HjpltdVpOQNdQ8EDkgfAmFsIp2Vim2twXeYJzgl1iUDgcfsxb/sX0K/m5sVzJFyhQoIDICj8BdDK9A9v2+oMAAAAASUVORK5CYII=" alt="sticker-square" /></label>
+
+{/* Put this part before </body> tag */}
+<input type="checkbox" id="my_modal_6" className="modal-toggle" />
+<div className="modal" role="dialog">
+  <div className="modal-box">
+    <div className='grid grid-cols-3 grid-rows-3 gap-2'>
+    {stickers.map((sticker, index ) => {
+     
+     return <img onClick={()=>handleSendSticker(`http://localhost:5002/pics/${sticker}`)} className="h-24 w-24 cursor-pointer" key={`sticker-${index}`} src={`http://localhost:5002/pics/${sticker}`} alt={sticker}/>
+    
+
+   })}
+    </div>
+    <div className="modal-action flex justify-between">
+
+    <div className="join grid grid-cols-2 w-[60%] ">
+  <button onClick={handlePrev} className="join-item btn btn-outline">Previous page</button>
+  <button onClick={handleNext} className="join-item btn btn-outline">Next</button>
+    </div>
+
+      <label htmlFor="my_modal_6" className="btn btn-outline">Close!</label>
+  </div>
+    </div>
+   
+</div>
 
           <button
             type="button"
@@ -96,7 +155,7 @@ const ChatInput = () => {
         <button
           type="submit"
           className="btn btn-sm btn-circle"
-          disabled={!text.trim() && !imagePreview}
+          disabled={!text.trim() && !imagePreview && !Selectedsticker}
         >
           <Send size={22} />
         </button>

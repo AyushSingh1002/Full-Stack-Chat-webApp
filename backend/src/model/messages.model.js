@@ -18,6 +18,9 @@ const MessagesSchema = new mongoose.Schema({
     },
     image : {
         type: String,
+    },
+    stickers : {
+        type: String,
     }
 },
     { timestamps : true }
