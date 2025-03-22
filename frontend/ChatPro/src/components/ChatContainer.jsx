@@ -9,7 +9,7 @@ import {formatMessageTime} from "../lib/utils.js"
 const image = "https://th.bing.com/th/id/OIP.PaHgcBDxUWH6FmlUnmwhQwHaMx?pid=ImgDet&w=183&h=315&c=7&dpr=1.1"
 
 const ChatContainer = () => {
-  const { message, getMessage, selectedUser, isMessageLoading, subscribeToMessages, unsubscribeToMessages, removeMessage} = useChatStore()
+  const { message, getMessage, selectedUser, isMessageLoading, subscribeToMessages, unsubscribeToMessages, removeMessage, stickers, getStickers} = useChatStore()
   const { AuthUser } = useAuthStore()
   const messageEndRef = useRef(null)
 
@@ -21,6 +21,11 @@ const ChatContainer = () => {
       }
     )
     console.log(menu)
+    useEffect(() => {
+      getStickers()
+    },[])
+
+    
 
   useEffect(() => {
     getMessage(selectedUser?._id)
@@ -46,53 +51,17 @@ const ChatContainer = () => {
    </div>
    )
   }
+  console.log(stickers)
   return (
-    <div className=' flex-1 flex flex-col overflow-auto'> 
-      < ChatHeader />
-    <div className='flex-1 overflow-y-auto p-4 space-y-4'>
-      {message.map((message) =>(
-       
-      <div
-      key={message._id}
-      className={`chat ${message.senderId === AuthUser._id ? "chat-end" : "chat-start"}`}
-      ref={messageEndRef}
-      
-      >
-        <div className='chat-image avatar'>
-          <div className='size-10 rounded-full border'>
-            <img 
-            src={message.senderId === AuthUser._id ? AuthUser.profilePic || image : selectedUser.profilePic || image } alt="" />
-          </div>
-        </div>
-        <div className={menu[message._id] ? "" : "hidden"}>
-        <ul className="menu bg-base-200 rounded-box w-56 relative">
-  <li className="menu-title">Menu</li>
-  <li><a onClick={()=>removeMessage(message._id)}>Delete</a></li>
-  <li><a>Info</a></li>
-</ul>
-        </div>
-      <div className='chat-header mb-1'>
-        <time className='text-sm opacity-45 ml-1'>
-          {formatMessageTime(message.createdAt)}
-        </time>
-      </div>
-      <div className="chat-bubble flex flex-col cursor-pointer"
-      onClick={()=>DisplayMenu(message._id)}
-      >
-              {message.image && (
-                <img
-                  src={message.image}
-                  alt="Attachment"
-                  className="sm:max-w-[200px] rounded-md mb-2"
-                />
-              )}
-              {message.text && <p>{message.text}</p>}
-            </div>
+    <div className='flex-1 flex flex-col overflow-auto'>
+      <ChatHeader />
+      {stickers.map((sticker) => (
+        <div key={sticker}> {/* Use a unique 'key' prop */}
+          <img src={sticker} alt="Image" />
 
-      </div>
+        </div>
       ))}
-    </div>
-    < ChatInput />
+      <ChatInput />
     </div>
   )
 }
