@@ -56,7 +56,7 @@ const UserSidebar = () => {
           >
             <div className="relative mx-auto lg:mx-0">
               <img
-                src={user.profilePic || "/defaultImg.jpeg" }
+                src={user.profilePic || "https://res.cloudinary.com/dfrddj3ru/image/upload/v1742644935/Caelus_Harmony_xkgrst.png" }
                 alt={user.name}
                 className="size-12 object-cover rounded-full"
               />
