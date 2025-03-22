@@ -125,7 +125,7 @@ const ChatInput = () => {
     <div className='grid grid-cols-3 grid-rows-3 gap-2'>
     {stickers.map((sticker, index ) => {
      
-     return <img onClick={()=>handleSendSticker(`${'https://full-stack-chat-webapp.onrender.com'}/pics/${sticker}`)} className="h-24 w-24 cursor-pointer" key={`sticker-${index}`} src={`${'https://full-stack-chat-webapp.onrender.com'}/pics/${sticker}`} alt={sticker}/>
+     return <img loading='lazy' onClick={()=>handleSendSticker(`${'https://full-stack-chat-webapp.onrender.com'}/pics/${sticker}`)} className="h-24 w-24 cursor-pointer" key={`sticker-${index}`} src={`${'https://full-stack-chat-webapp.onrender.com'}/pics/${sticker}`} alt={sticker}/>
     
 
    })}
