@@ -6,6 +6,7 @@ export const useChatStore = create((set, get) => ({
  message : [],
     users : [],
     stickers : [],
+    replyTo : null,
      limit : 9,
      page : 1,
     selectedUser : null,
@@ -78,6 +79,8 @@ export const useChatStore = create((set, get) => ({
             
         }
     },
+    setReplyTo: (replyTo) => set({replyTo : replyTo}),
+    
     setPage: (page) => {
         set({page : page });
         get().getStickers();

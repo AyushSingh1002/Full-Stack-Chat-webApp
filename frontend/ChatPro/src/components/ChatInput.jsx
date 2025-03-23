@@ -6,7 +6,7 @@ const ChatInput = () => {
   const [text, setText] = useState(''); // Correct useState syntax
   const [imagePreview, setImagePreview] = useState(''); // Correct state management
   const inputFileRef = useRef(null); // Correct casing for consistency
-  const { sendMessage, stickers, getStickers, page, setPage} = useChatStore(); // Assuming these methods are defined
+  const { sendMessage, stickers, getStickers, page, setPage, replyTo, setReplyTo} = useChatStore(); // Assuming these methods are defined
   const [ Selectedsticker , setSticker ] = useState("")
 
   const handleImageChange = (e) => {
@@ -26,8 +26,11 @@ const ChatInput = () => {
           text: "", // No text message
           image: "", // No image
           stickers: sticker, // Sticker URL
+          replyTo: replyTo?.text || replyTo?.image || replyTo?.stickers || null, // Safely handle replyTo
         });
+        
         setSticker("") // Reset the selected sticker after sending
+        setReplyTo("")
         
     
         // Close the modal after sending
@@ -43,10 +46,13 @@ const ChatInput = () => {
     try {
      await sendMessage ({
       text : text.trim(),
-      image : imagePreview,})
+      image : imagePreview,
+    replyTo : replyTo.text || replyTo.image || replyTo.stickers
+  })
       
       setText("")
       setImagePreview("")
+      setReplyTo("")
 
       if (inputFileRef.current) {
         inputFileRef.current.value = "";
@@ -79,6 +85,40 @@ const ChatInput = () => {
 
   return (
     <div className="p-4 w-full">
+
+{replyTo && (
+  <div className="mb-4 p-3 rounded-xl bg-gradient-to-r from-gray-100 via-white to-gray-200 shadow-lg flex items-center justify-between">
+    <div className="flex items-center gap-4">
+      {replyTo.text && (
+        <p className="text-sm text-gray-800 font-medium">
+          <span className="text-blue-600 font-semibold">Replying to:</span> {replyTo.text}
+        </p>
+      )}
+      {replyTo.image && (
+        <img
+          src={replyTo.image}
+          alt="Replying to"
+          className="w-16 h-16 object-cover rounded-md border-2 border-gray-300 shadow-sm"
+        />
+      )}
+      {replyTo.stickers && (
+        <img
+          src={replyTo.stickers}
+          alt="Replying to"
+          className="w-16 h-16 object-cover rounded-md border-2 border-gray-300 shadow-sm"
+        />
+      )}
+    </div>
+    <button
+      onClick={() => setReplyTo(null)}
+      className="p-2 rounded-full bg-red-500 text-white hover:bg-red-600 shadow-md transition-transform transform hover:scale-110"
+    >
+      <X size={18} />
+    </button>
+  </div>
+)}
+
+
       {imagePreview && (
         <div className="mb-3 flex items-center gap-2">
           <div className="relative">

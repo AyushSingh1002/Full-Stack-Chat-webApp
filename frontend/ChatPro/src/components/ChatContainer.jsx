@@ -9,7 +9,7 @@ import {formatMessageTime} from "../lib/utils.js"
 const image = "https://th.bing.com/th/id/OIP.PaHgcBDxUWH6FmlUnmwhQwHaMx?pid=ImgDet&w=183&h=315&c=7&dpr=1.1"
 
 const ChatContainer = () => {
-  const { message, getMessage, selectedUser, isMessageLoading, subscribeToMessages, unsubscribeToMessages, removeMessage} = useChatStore()
+  const { message, getMessage, selectedUser, isMessageLoading, subscribeToMessages, unsubscribeToMessages, removeMessage, replyTo, setReplyTo} = useChatStore()
   const { AuthUser } = useAuthStore()
   const messageEndRef = useRef(null)
 
@@ -20,6 +20,10 @@ const ChatContainer = () => {
       setMenu((m) => ({...m, [messageId] : !m[messageId]}))
       }
     )
+    const handleReply = (message) => {
+      setReplyTo(message)
+      console.log(replyTo)
+    }
  
 
   useEffect(() => {
@@ -38,7 +42,7 @@ const ChatContainer = () => {
   },[message])
 
   if(isMessageLoading) {
-   return ( <div className=' flex-1 flex flex-col overflow-auto'>
+   return ( <div className=' flex-1 flex flex-col overflow-auto '>
     < ChatHeader />
            <Skeleton />
            < ChatInput />
@@ -46,7 +50,7 @@ const ChatContainer = () => {
    )
   }
   return (
-    <div className=' flex-1 flex flex-col overflow-auto'> 
+    <div className=' flex-1 flex flex-col overflow-auto '> 
       < ChatHeader />
     <div className='flex-1 overflow-y-auto p-4 space-y-4'>
       {message.map((message) =>(
@@ -67,7 +71,7 @@ const ChatContainer = () => {
         <ul className="menu bg-base-200 rounded-box w-56 relative">
   <li className="menu-title">Menu</li>
   <li><a onClick={()=>removeMessage(message._id)}>Delete</a></li>
-  <li><a>Info</a></li>
+  <li><a onClick={()=>handleReply(message)}>Reply</a></li>
 </ul>
         </div>
       <div className='chat-header mb-1'>
@@ -92,7 +96,23 @@ const ChatContainer = () => {
     className="sm:max-w-[200px] h-[120px] w-[120px] bg-transparent rounded-md m-0 p-0"
   />
 )}
-              {message.text && <p>{message.text}</p>}
+{message.reply && (
+  <div className="flex items-center gap-4 mb-2 p-3 bg-gray-100 rounded-lg shadow">
+    {message.reply.length > 40 ? (
+      <img
+        src={message.reply}
+        alt="Reply Image"
+        className="h-20 w-20 object-cover rounded-lg border border-gray-300"
+      />
+    ) : (
+      <div className="text-sm text-gray-700 font-medium">
+        <span className="text-blue-600 font-semibold">Replied on:</span> {message.reply}
+      </div>
+    )}
+  </div>
+)}
+
+             {message.text && <p>{message.text}</p>}
             </div>
 
       </div>

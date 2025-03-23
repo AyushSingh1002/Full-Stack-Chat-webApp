@@ -13,6 +13,10 @@ const MessagesSchema = new mongoose.Schema({
         required: true,
         ref: "User"
     },
+    reply : {
+        type: String,
+        default: null
+    },
     text : {
         type: String,
     },
