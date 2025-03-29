@@ -47,7 +47,7 @@ const ChatInput = () => {
      await sendMessage ({
       text : text.trim(),
       image : imagePreview,
-    replyTo : replyTo.text || replyTo.image || replyTo.stickers
+    replyTo : replyTo?.text || replyTo?.image || replyTo?.stickers || null,
   })
       
       setText("")
